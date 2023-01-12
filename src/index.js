@@ -9,10 +9,12 @@ const { swaggerV3ToJs } = require("./v3");
 async function openapiGenerate(_config = {}) {
   const config = buildConfig(compilePresets(_config));
 
-  validConfig(config);
+  validateConfig(config);
 
   const apiJson = await loadApiJson(config);
-  const { code, types } = await byVersion(apiJson, config);
+  const version = detectVersion(apiJson);
+
+  const { code, types } = await runCompilation(version, apiJson, config);
 
   return { code, types, swaggerData: apiJson };
 }
@@ -56,7 +58,7 @@ function buildConfig(config = {}) {
   };
 }
 
-function validConfig(config) {
+function validateConfig(config) {
   const isExistFile = Boolean(config.file);
   const isExistApiJson = Boolean(config.apiJson);
 
@@ -65,16 +67,24 @@ function validConfig(config) {
   }
 }
 
-async function byVersion(apiJson, config) {
-  if (apiJson.openapi) {
-    return await swaggerV3ToJs(apiJson, config);
-  }
+function detectVersion(apiJson) {
+  if (apiJson.openapi) return 3;
+  if (apiJson.swagger) return 2;
+  return null;
+}
 
-  if (apiJson.swagger) {
-    console.info(
-      "[deprecated] OpenAPI/Swagger v2 is deprecated and support will be removed. Please, convert v2 into v3 before generating code.",
-    );
-    return await swaggerV2ToJs(apiJson, config);
+async function runCompilation(version, apiJson, config) {
+  switch (version) {
+    case 3: {
+      return await swaggerV3ToJs(apiJson, config);
+    }
+
+    case 2: {
+      console.info(
+        "[deprecated] OpenAPI/Swagger v2 is deprecated and support will be removed. Please, convert v2 into v3 before generating code.",
+      );
+      return await swaggerV2ToJs(apiJson, config);
+    }
   }
 
   throw new Error("Unable to determine the version of OpenAPI/Swagger");
