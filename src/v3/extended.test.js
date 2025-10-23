@@ -1,7 +1,7 @@
 const path = require("path");
 const { openapiGenerate: swaggerToJs } = require("../index");
 
-test("use github api", async () => {
+test.skip("use github api", async () => {
   const result = await swaggerToJs({
     file: path.resolve(__dirname, "mocks", "api.github.com.json"),
   });

@@ -1,5 +1,8 @@
 {
   "name": "@oapigen/cli",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.0-version-set-from-ci",
   "description": "Generate JavaScript or TypeScript code from Swagger/OpenAPI specifications",
   "main": "./src/index.js",
