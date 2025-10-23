@@ -1,31 +1,31 @@
-# openapi/openapi
+# oapigen/cli
 
 Generate JavaScript or TypeScript code from Swagger/OpenAPI specification.
 
 ## Install
 
 ```sh
-npm install -D openapi
+npm install -D @oapigen/cli
 # or
-pnpm add -D openapi
+pnpm add -D @oapigen/cli
 # or
-yarn add -D openapi
+yarn add -D @oapigen/cli
 ```
 
 ## Examples
 
 ```sh
-pnpm openapi --file ../src/mocks/local-file-api.json
+pnpm oapi --file ../src/mocks/local-file-api.json
 # or
-pnpm openapi --file ../src/mocks/local-file-api.yaml
+pnpm oapi --file ../src/mocks/local-file-api.yaml
 # or
-pnpm openapi --file protocol://url/api.json
+pnpm oapi --file protocol://url/api.json
 ```
 
 ## Usage CLI
 
 ```sh
-pnpm openapi [options]
+pnpm oapi [options]
 
 Options:
   -V, --version            output the version number
@@ -46,6 +46,8 @@ Options:
 This package use [`cosmiconfig`](https://github.com/davidtheclark/cosmiconfig) for finding config.
 
 ### Config can exist next places
+
+> TODO: config file may be renamed in the next major version
 
 - a `openapi` property in `package.json`
 - a `.openapirc` file in JSON or YAML format
@@ -74,7 +76,7 @@ module.exports = {
   deprecated: "warning", // "warning" | "ignore" | "exception" (default: "warning")
 
   // Import request code in out code
-  // true — add import from `openapi/request`
+  // true — add import from `@oapigen/cli/request`
   // false — embed request to `outputDir` and import from it
   // "disabled" — completely disable imporing `request`, use `templateCodeBefore`
   importRequest: true, // (default: false)
@@ -109,12 +111,12 @@ module.exports = {
    * If preset created as a function, options can be passed
    * @example
    * presets: [
-   *  ['my-super-openapi-preset', { passed: 'options' }],
-   *  ['another-openapi-preset', { beautiful: 'options' }],
+   *  ['oapigen-preset-my-super', { passed: 'options' }],
+   *  ['@oapigen/preset-another', { beautiful: 'options' }],
    * ]
    * If no options passed or used simple form, empty object passed to functional preset
    */
-  presets: ['my-super-openapi-preset'], // (default: [])
+  presets: ['oapigen-preset-my-super'], // (default: [])
 
   /**
    * Template before main block code
@@ -197,7 +199,7 @@ module.exports = {
 ## API
 
 ```js
-import { openapiGenerate } from "openapi";
+import { openapiGenerate } from "@oapigen/cli";
 
 const { code, types } = openapiGenerate({
   file: "./swagger-api.json",
@@ -210,7 +212,7 @@ console.log(types);
 // => typescript types
 ```
 
-[More examples](https://github.com/openapi/openapi/tree/next/examples)
+[More examples](https://github.com/oapigen/cli/tree/next/examples)
 
 ## Additional notes
 
@@ -220,11 +222,11 @@ console.log(types);
 ## How to create custom preset
 
 1. Create new NPM package (create directory and `npm init` there)
-1. Name your package with `openapi-preset-` prefix (ex.: `openapi-preset-effector`)
+1. Name your package with `oapigen-preset-` prefix (ex.: `oapigen-preset-effector`)
 1. Create `index.js` and set `"main": "index.js"` in your package.json
 1. Fill your `index.js` with any properties from list before
 1. Save and publish
-1. Use it like: `presets: ['openapi-preset-example']`
+1. Use it like: `presets: ['oapigen-preset-example']`
 
 > Hint: if you want to use local file as a preset, just use `require.resolve`:
 > `presets: [require.resolve('./local-preset')]`
@@ -241,9 +243,7 @@ console.log(types);
 ```js
 module.exports = (options) => ({
   templateRequestCode: (request, extra) =>
-    options.parseBody
-      ? generatorWithParser(request, extra)
-      : simpleGenerator(request, extra),
+    options.parseBody ? generatorWithParser(request, extra) : simpleGenerator(request, extra),
 });
 ```
 
@@ -253,11 +253,8 @@ Usage `openapi.config.js`:
 module.exports = {
   file: "./swagger-api.json",
   presets: [
-    ["openapi-preset-example", { parseBody: true }],
-    [
-      "openapi-preset-another",
-      { requestImport: { module: "./axios-fabric", name: "axios" } },
-    ],
+    ["oapigen-preset-example", { parseBody: true }],
+    ["@oapigen/preset-another", { requestImport: { module: "./axios-fabric", name: "axios" } }],
   ],
 };
 ```
@@ -280,7 +277,7 @@ module.exports = {
 ### How to release a new version
 
 1. Wait for release-drafter to generates a new draft release
-1. All PRs should have correct labels and useful titles. You can [review available labels here](https://github.com/openapi/openapi/blob/master/.github/release-drafter.yml).
-1. Update labels for PRs and titles, next [manually run the release drafter action](https://github.com/openapi/openapi/actions/workflows/release-drafter.yml) to regenerate the draft release.
+1. All PRs should have correct labels and useful titles. You can [review available labels here](https://github.com/oapigen/cli/blob/master/.github/release-drafter.yml).
+1. Update labels for PRs and titles, next [manually run the release drafter action](https://github.com/oapigen/cli/actions/workflows/release-drafter.yml) to regenerate the draft release.
 1. Review the new version and press "Publish"
 1. If required check "Create discussion for this release"

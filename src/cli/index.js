@@ -121,7 +121,7 @@ function buildFiles({ code, types, swaggerData }, config = {}) {
 
   if (importRequest === true) {
     files[nameCode] = {
-      content: `import { request } from 'openapi/request';\n\n${code}`,
+      content: `import { request } from '@oapigen/cli/request';\n\n${code}`,
     };
   } else if (importRequest === false) {
     files[nameCode] = {

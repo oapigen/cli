@@ -1,17 +1,16 @@
 {
-  "name": "openapi",
+  "name": "@oapigen/cli",
   "version": "0.0.0-version-set-from-ci",
   "description": "Generate JavaScript or TypeScript code from Swagger/OpenAPI specifications",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
-  "repository": "openapi/openapi",
+  "repository": "oapigen/cli",
   "contributors": [
     "e.fedotov <fedotov1290@gmail.com>",
     "Sergey Sova <mail@sergeysova.com> (https://sergeysova.com)"
   ],
-  "packageManager": "pnpm@7.24.3",
   "engines": {
-    "node": ">=14 < 19"
+    "node": ">=14 <= 22"
   },
   "license": "MIT",
   "keywords": [
@@ -20,12 +19,13 @@
     "api",
     "js",
     "types",
+    "oapigen",
     "openapi",
     "typescript"
   ],
-  "homepage": "https://github.com/openapi/openapi",
+  "homepage": "https://github.com/oapigen/cli",
   "bugs": {
-    "url": "https://github.com/openapi/openapi/issues"
+    "url": "https://github.com/oapigen/cli/issues"
   },
   "scripts": {
     "test": "jest --testPathIgnorePatterns package.test",
@@ -45,7 +45,7 @@
     "request.js"
   ],
   "bin": {
-    "openapi": "./src/cli/index.js"
+    "oapi": "./src/cli/index.js"
   },
   "dependencies": {
     "@types/jest": "^26.0.14",
@@ -69,5 +69,6 @@
     "jest": "^26.5.2",
     "openapi-preset-effector": "^0.3.2",
     "prettier": "^2.8.2"
-  }
+  },
+  "packageManager": "pnpm@10.18.3+sha512.bbd16e6d7286fd7e01f6b3c0b3c932cda2965c06a908328f74663f10a9aea51f1129eea615134bf992831b009eabe167ecb7008b597f40ff9bc75946aadfb08d"
 }
